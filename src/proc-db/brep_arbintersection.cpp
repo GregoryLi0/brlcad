@@ -19,34 +19,9 @@
  */
 /** @file proc-db/brep_arbintersection.cpp
  *
- * Creates a brep with the following topology making direct use of
- * the openNURBS API:
- *
- *             H-------e6-------G
- *            /                /|
- *           / |              / |
- *          /  e7            /  e5
- *         /   |            /   |
- *        /                e10  |
- *       /     |          /     |
- *      e11    E- - e4- -/- - - F
- *     /                /      /
- *    /      /         /      /
- *   D---------e2-----C      e9
- *   |     /          |     /
- *   |    e8          |    /
- *   e3  /            e1  /
- *   |                |  /
- *   | /              | /
- *   |                |/
- *   A-------e0-------B
- *
- * Copied almost verbatim from the file
- * src/other/openNURBS/example_brep.cpp in order to explore the API
- * for creating B-Reps. There is a slight bit more relevant
- * documentation in this version than the other. In addition, this
- * version uses the wdb interface to add the B-Rep to a BRL-CAD
- * geometry file.
+ * Creates some brep objects using arb8 interserction
+ * 
+ * 
  */
 
 #include "common.h"
