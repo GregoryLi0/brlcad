@@ -284,14 +284,10 @@ create_sph_matrix(float sph0_r = 2.0f, float sph1_r = 1.0f)
     }
 }
 
-
-
 int
 main(int argc, char** argv)
 {
-    ON_TextLog error_log;
     const char* id_name = "B-Rep Example";
-    const char* geom_name = "cube.s";
 
     bu_setprogname(argv[0]);
 
