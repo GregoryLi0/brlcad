@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#               B R E P P _ R I M I T I V E . S H
+#               B R E P P _ R H C _ T E S T . S H
 # BRL-CAD
 #
 # Copyright (c) 2004-2022 United States Government as represented by
@@ -35,25 +35,27 @@
 #
 ###
 #
-# This script creates solid primitives and converts them to brep
-# format
+# This script creates rhc primitives with different parameters, then
+# convert them to brep format.
 #
 ###
 
-db_name="brep_primitive.g"
+db_name="brep_rhc_test.g"
 
 # distance between two primitives
-grid_size=2000
+grid_size=2
 # how many primitives in each row
-num_per_row=5
+num_per_row=3
 
-# 1: obj name. 2: obj type. 3: shift_x 4: shift_y
-createObjWithPos(){
+# 1: obj name. 2: shift_x 3: shift_y
+# 4 5 6: X, Y, Z, of vector H
+# 7 8 9: X, Y, Z, of vector B
+# 10: ectangular half-width, r
+# 11: apex-to-asymptotes distance, c
+createRhcWithPos(){
 	mged -c $db_name <<EOF
-	make $1 $2
-	sed $1
-	translate $3 $4 0
-	accept
+	in $1 rhc $2 $3 0 $4 $5 $6 $7 $8 $9 ${10} ${11}
+	Z
 EOF
 }
 
@@ -71,36 +73,32 @@ mged -c $db_name opendb $db_name
 shift_x=0
 shift_y=0
 
-objs=("arb8" "ell" "sph" "ehy" "epa"
-	  "tgc" "rcc" "rec" "rhc" "rpc" "tec"
-	  "trc" "tor" "eto" "part" "pipe" "ars"
-	  "bot")
+case_num=6
 
-# primitive name: {xpos}_{ypos}_xxx.p
-# brep name: {xpos}_{ypos}_xxx.b
-for(( i=0;i<${#objs[@]};i++)) do
-	element_type=${objs[i]}
-	element_name=$[$i / $num_per_row]_$[$i % $num_per_row]_${objs[i]}
-	echo $element_name
-	createObjWithPos ${element_name}.p $element_type ${shift_x} ${shift_y}
-	#convertBrep ${element_name}.p ${element_name}.b
+# parameters:
+# 0-2: X, Y, Z, of vector H
+# 3-5: X, Y, Z, of vector B
+# 6: ectangular half-width, r
+# 7: apex-to-asymptotes distance, c
+para_c0=(0 0 1 1 1 0 1 1)
+para_c1=(1 0 0 0 0.5 0.5 0.2 0.1)
+para_c2=(0 0 1 0.5 0.5 0 0.6 0.5)
+para_c3=(0 0 1 -1 1 0 1.4 0.6)
+para_c4=(0 1 0 -1 0 1 0.2 0.2)
+para_c5=(1 0 0 0 -1 1 0.7 1.6)
+
+for(( i=0;i<${case_num};i++)) do
+	element_name=rhc_${i}
+	eval para_name=\${para_c${i}[*]}
+
+	createRhcWithPos ${element_name}.p ${shift_x} ${shift_y} ${para_name}
+	
+	convertBrep ${element_name}.p ${element_name}.b
 	let shift_x+=$grid_size
 	if [ $shift_x -gt $[ $grid_size * $num_per_row - $grid_size] ]; then
 		shift_x=0
 		let shift_y+=$grid_size
 	fi
-done;
-
-
-for(( i=0;i<${#objs[@]};i++)) do
-	element_name=$[$i / $num_per_row]_$[$i % $num_per_row]_${objs[i]}
-	mged -c $db_name <<EOF
-	draw ${element_name}.p
-	sed ${element_name}.p
-	rot 30 30 30
-	accept
-EOF
-	convertBrep ${element_name}.p ${element_name}.b
 done;
 
 # region primitives and breps respectively
