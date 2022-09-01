@@ -44,7 +44,7 @@ const char* db_name = "brep_primitives_intersection.g";
 
 static void
 printusage(void) {
-    fprintf(stderr,"Usage: brep_primitives_intersection (takes no arguments)\n");
+    fprintf(stderr,"Usage: brep_primitives_intersection primitive(arb/sph/rcc)\n");
 }
 
 void
@@ -408,23 +408,30 @@ int
 main(int argc, char** argv)
 {
     const char* id_name = "B-Rep Example";
+    int k;
 
     bu_setprogname(argv[0]);
 
     if (BU_STR_EQUAL(argv[1], "-h") || BU_STR_EQUAL(argv[1], "-?")) {
     	printusage();
     	return 0;
-    }
-    if (argc > 1) {
-    	printusage();
-	return 1;
-    }
+    } 
 
     ON::Begin();
 
     outfp = wdb_fopen(db_name);
     mk_id(outfp, id_name);
-    create_rcc_matrix();
+    
+    // default function as creating arb8 matrix
+    if (argc == 1 || BU_STR_EQUAL(argv[1], "arb")) {
+        create_arb8_matrix();
+    } else if (BU_STR_EQUAL(argv[1], "sph")) {
+        create_sph_matrix();
+    } else if (BU_STR_EQUAL(argv[1], "rcc")) {
+        create_rcc_matrix();
+    } else {
+        printusage();
+    }
 
     ON::End();
 
