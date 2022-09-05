@@ -41,6 +41,7 @@
 
 struct rt_wdb* outfp;
 const char* db_name = "brep_primitives_intersection.g";
+const char* id_name = "B-Rep Primitives test";
 
 static void
 printusage(void) {
@@ -57,6 +58,9 @@ pointShift(point_t* point, ON_3dPoint shift) {
 int
 create_arb8_matrix()
 {
+    ON::Begin();
+    outfp = wdb_fopen(db_name);
+    mk_id(outfp, id_name);
     // caculate vertex positions of arb8s
     struct ON_3dPoint shift(0, 0, 0);   //each test case have a 4*4*4 space
     double shift_space = 4.0;
@@ -167,14 +171,18 @@ create_arb8_matrix()
             }
         }
     }
+    ON::End();
 }
 
 int
 create_sph_matrix(float sph0_r = 2.0f, float sph1_r = 1.0f)
 {
+    ON::Begin();
+    outfp = wdb_fopen(db_name);
+    mk_id(outfp, id_name);
+    // caculate positions of sphs according to sph radius
     caculate_ell_pos(sph0_r, sph1_r);
-    // caculate vertex positions of sphs
-    struct ON_3dPoint shift(0, 0, 0);   //each test case have a shift_space*shift_space*shift_space space
+    struct ON_3dPoint shift(0, 0, 0);   // each test case have a shift_space*shift_space*shift_space space
     float shift_space = (sph0_r + sph1_r) * 2;
     for (int i = 0; i < 5; i++) {
         shift.x = i * shift_space;
@@ -183,6 +191,8 @@ create_sph_matrix(float sph0_r = 2.0f, float sph1_r = 1.0f)
             for (int k = 0; k < 5; k++) {
                 shift.z = k * shift_space;
                 int case_id = i * 25 + j * 5 + k;
+
+                // create sphs
                 rt_ell_internal* ell_0;
                 rt_ell_internal* ell_1;
                 BU_ALLOC(ell_0, struct rt_ell_internal);
@@ -281,12 +291,16 @@ create_sph_matrix(float sph0_r = 2.0f, float sph1_r = 1.0f)
             }
         }
     }
+    ON::End();
 }
 
 int
 create_rcc_matrix(float rcc0_h = 2.0f, float rcc0_r = 1.0f, float rcc1_h = 2.0f, float rcc1_r = 1.0f)
 {
-    float scale = 4.0f;
+    ON::Begin();
+    outfp = wdb_fopen(db_name);
+    mk_id(outfp, id_name);
+    // caculate positions of rccs according to sph radius
     caculate_rcc_pos(rcc0_h, rcc0_r, rcc1_h, rcc1_r);
     // caculate vertex positions of sphs
     struct ON_3dPoint shift(0, 0, 0);   //each test case have a shift_space*shift_space*shift_space space
@@ -402,14 +416,12 @@ create_rcc_matrix(float rcc0_h = 2.0f, float rcc0_r = 1.0f, float rcc1_h = 2.0f,
             }
         }
     }
+    ON::End();
 }
 
 int
 main(int argc, char** argv)
 {
-    const char* id_name = "B-Rep Example";
-    int k;
-
     bu_setprogname(argv[0]);
 
     if (BU_STR_EQUAL(argv[1], "-h") || BU_STR_EQUAL(argv[1], "-?")) {
@@ -417,11 +429,6 @@ main(int argc, char** argv)
     	return 0;
     } 
 
-    ON::Begin();
-
-    outfp = wdb_fopen(db_name);
-    mk_id(outfp, id_name);
-    
     // default function as creating arb8 matrix
     if (argc == 1 || BU_STR_EQUAL(argv[1], "arb")) {
         create_arb8_matrix();
@@ -431,9 +438,9 @@ main(int argc, char** argv)
         create_rcc_matrix();
     } else {
         printusage();
+        return 0;
     }
 
-    ON::End();
 
     return 0;
 }
