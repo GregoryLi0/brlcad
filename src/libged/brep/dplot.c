@@ -91,15 +91,17 @@ dplot_overlay(
 	int idx,
 	const char *name)
 {
-    const char *cmd_av[] = {"overlay", "[filename]", "1.0", "[name]"};
+    //const char *cmd_av[] = {"overlay", "[filename]", "1.0", "[name]"};
+     const char *cmd_av[] = {"overlay", "[filename]"};
     int ret, cmd_ac = sizeof(cmd_av) / sizeof(char *);
     struct bu_vls overlay_name = BU_VLS_INIT_ZERO;
 
     bu_vls_printf(&overlay_name, "%s%s%d.plot3", prefix, infix, idx);
-    cmd_av[1] = cmd_av[3] = bu_vls_cstr(&overlay_name);
+    /*cmd_av[1] = cmd_av[3] = bu_vls_cstr(&overlay_name);
     if (name) {
 	cmd_av[3] = name;
-    }
+    }*/
+	cmd_av[1] = bu_vls_cstr(&overlay_name);
     ret = ged_exec(gedp, cmd_ac, cmd_av);
     bu_vls_free(&overlay_name);
 
