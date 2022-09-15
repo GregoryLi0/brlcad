@@ -457,27 +457,16 @@ dplot_split_faces(
 	    }
 	}
 
-	split_face = info->fdata.face[info->event_idx];
-	bu_vls_printf(&name, "_split_face%d_outerloop_curve", info->event_idx);
-	for (i = 0; i < split_face.outerloop_curves; ++i) {
-	    bu_vls_trunc(&short_name, 0);
-	    bu_vls_printf(&short_name, "sfo%d", i);
+	struct bu_vls name = BU_VLS_INIT_ZERO;
 
-	    dplot_erase_overlay(info, bu_vls_cstr(&short_name));
-	    dplot_overlay(info->gedp, info->prefix, bu_vls_cstr(&name), i,
-		    bu_vls_cstr(&short_name));
+	if (info->event_idx < info->brep1_surf_count) {
+		dplot_overlay(info->gedp, info->prefix, "_brep1_surface", info->event_idx, NULL);
+
+	}
+	else if (info->event_idx < info->brep1_surf_count + info->brep2_surf_count) {
+		dplot_overlay(info->gedp, info->prefix, "_brep2_surface", info->event_idx - info->brep1_surf_count, NULL);
 	}
 
-	bu_vls_trunc(&name, 0);
-	bu_vls_printf(&name, "_split_face%d_innerloop_curve", info->event_idx);
-	for (i = 0; i < split_face.innerloop_curves; ++i) {
-	    bu_vls_trunc(&short_name, 0);
-	    bu_vls_printf(&short_name, "sfi%d", i);
-
-	    dplot_erase_overlay(info, bu_vls_cstr(&short_name));
-	    dplot_overlay(info->gedp, info->prefix, bu_vls_cstr(&name), i,
-		    bu_vls_cstr(&short_name));
-	}
 
 	bu_vls_printf(info->gedp->ged_result_str, "Press [Enter] to show "
 		"split face %d", ++info->event_idx);
