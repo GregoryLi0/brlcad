@@ -218,10 +218,12 @@ dplot_ssx_events(
     int ret;
 
     /* erase old event plots */
-    ret = dplot_erase_overlay(info, "curr_event");
+    /*ret = dplot_erase_overlay(info, "curr_event");
     if (ret != BRLCAD_OK) {
 	return ret;
-    }
+    }*/
+
+	dplot_erase_overlay(info, "curr_event");
 
     if (info->mode != DPLOT_SSX_EVENTS) {
 	return BRLCAD_OK;
