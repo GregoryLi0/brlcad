@@ -91,23 +91,20 @@ dplot_overlay(
 	int idx,
 	const char *name)
 {
-    const char *cmd_av[] = {"overlay", "[filename]", "1.0", "[name]"};
-    int ret, cmd_ac = sizeof(cmd_av) / sizeof(char *);
-    struct bu_vls overlay_name = BU_VLS_INIT_ZERO;
+	const char* cmd_av[] = { "overlay", "[filename]" };
+	int ret, cmd_ac = sizeof(cmd_av) / sizeof(char*);
+	struct bu_vls overlay_name = BU_VLS_INIT_ZERO;
 
-    bu_vls_printf(&overlay_name, "%s%s%d.plot3", prefix, infix, idx);
-    cmd_av[1] = cmd_av[3] = bu_vls_cstr(&overlay_name);
-    if (name) {
-	cmd_av[3] = name;
-    }
-    ret = ged_overlay(gedp, cmd_ac, cmd_av);
-    bu_vls_free(&overlay_name);
+	bu_vls_printf(&overlay_name, "%s%s%d.plot3", prefix, infix, idx);
+	cmd_av[1] = bu_vls_cstr(&overlay_name);
+	ret = ged_exec(gedp, cmd_ac, cmd_av);
+	bu_vls_free(&overlay_name);
 
-    if (ret != GED_OK) {
-	bu_vls_printf(gedp->ged_result_str, "error overlaying plot\n");
-	return GED_ERROR;
-    }
-    return GED_OK;
+	if (ret != BRLCAD_OK) {
+		bu_vls_printf(gedp->ged_result_str, "error overlaying plot\n");
+		return BRLCAD_ERROR;
+	}
+	return BRLCAD_OK;
 }
 
 HIDDEN int
