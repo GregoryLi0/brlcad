@@ -83,6 +83,9 @@ struct dplot_info {
     info.mode = DPLOT_INITIAL; \
     return GED_ERROR;
 
+/// <summary>
+/// idx: -1 represent '*'
+/// </summary>
 HIDDEN int
 dplot_overlay(
 	struct ged *gedp,
@@ -95,7 +98,14 @@ dplot_overlay(
 	int ret, cmd_ac = sizeof(cmd_av) / sizeof(char*);
 	struct bu_vls overlay_name = BU_VLS_INIT_ZERO;
 
-	bu_vls_printf(&overlay_name, "%s%s%d.plot3", prefix, infix, idx);
+	if (idx == -1)
+	{
+		bu_vls_printf(&overlay_name, "%s%s*.plot3", prefix, infix);
+	}
+	else
+	{
+		bu_vls_printf(&overlay_name, "%s%s%d.plot3", prefix, infix, idx);
+	}
 	cmd_av[1] = bu_vls_cstr(&overlay_name);
 	ret = ged_exec(gedp, cmd_ac, cmd_av);
 	bu_vls_free(&overlay_name);
@@ -152,24 +162,14 @@ dplot_ssx(
 	bu_vls_free(&name);
     }
     if (info->mode == DPLOT_SSX_FIRST || info->mode == DPLOT_SSX || info->mode == DPLOT_SSX_EVENTS) {
-	for (i = 0; i < info->brep1_surf_count; ++i) {
-	    if (info->mode != DPLOT_SSX_FIRST && i == info->brep1_surf_idx) {
-		continue;
-	    }
-	    ret = dplot_overlay(info->gedp, info->prefix, "_brep1_surface", i, NULL);
-	    if (ret != GED_OK) {
-		return GED_ERROR;
-	    }
-	}
-	for (i = 0; i < info->brep2_surf_count; ++i) {
-	    if (info->mode != DPLOT_SSX_FIRST && i == info->brep2_surf_idx) {
-		continue;
-	    }
-	    ret = dplot_overlay(info->gedp, info->prefix, "_brep2_surface", i, NULL);
-	    if (ret != GED_OK) {
-		return GED_ERROR;
-	    }
-	}
+		ret = dplot_overlay(info->gedp, info->prefix, "_brep1_surface", -1, NULL);
+		if (ret != GED_OK) {
+			return GED_ERROR;
+		}
+		ret = dplot_overlay(info->gedp, info->prefix, "_brep2_surface", -1, NULL);
+		if (ret != GED_OK) {
+			return GED_ERROR;
+		}
     }
 
     /* draw highlighted surface-surface intersection pair */
