@@ -410,27 +410,7 @@ dplot_split_faces(
     }
 
     if (info->event_idx >= info->fdata.split_face_count) {
-	for (i = 0; i < info->fdata.split_face_count; ++i) {
-	    split_face = info->fdata.face[i];
-
-	    bu_vls_trunc(&name, 0);
-	    bu_vls_printf(&name, "_split_face%d_outerloop_curve", i);
-	    for (j = 0; j < split_face.outerloop_curves; ++j) {
-		bu_vls_trunc(&short_name, 0);
-		bu_vls_printf(&short_name, "sf%do%d", i, j);
-		dplot_overlay(info->gedp, info->prefix, bu_vls_cstr(&name), j,
-			bu_vls_cstr(&short_name));
-	    }
-
-	    bu_vls_trunc(&name, 0);
-	    bu_vls_printf(&name, "_split_face%d_innerloop_curve", i);
-	    for (j = 0; j < split_face.innerloop_curves; ++j) {
-		bu_vls_trunc(&short_name, 0);
-		bu_vls_printf(&short_name, "sf%di%d", i, j);
-		dplot_overlay(info->gedp, info->prefix, bu_vls_cstr(&name), j,
-			bu_vls_cstr(&short_name));
-	    }
-	}
+		return BRLCAD_OK;
     } else {
 	if (info->event_idx > 0) {
 	    /* erase curves of previous split face */
