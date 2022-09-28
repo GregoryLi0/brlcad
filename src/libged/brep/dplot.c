@@ -222,18 +222,19 @@ dplot_ssx_events(
     }
 
     if (info->event_count > 0) {
-	/* convert event ssx_idx to string */
-	struct bu_vls infix = BU_VLS_INIT_ZERO;
-	bu_vls_printf(&infix, "_ssx%d_event", info->ssx_idx);
 
 	/* plot overlay */
-	ret = dplot_overlay(info->gedp, info->prefix, bu_vls_cstr(&infix),
-		info->event_idx, "curr_event");
-	bu_vls_free(&infix);
-
+	ret = dplot_overlay(info->gedp, info->prefix, "_highlight_brep1_surface",
+		info->brep1_surf_idx, "dplot_ssx1");
 	if (ret != GED_OK) {
-	    return ret;
+		return GED_ERROR;
 	}
+	ret = dplot_overlay(info->gedp, info->prefix, "_highlight_brep2_surface",
+		info->brep2_surf_idx, "dplot_ssx2");
+	if (ret != GED_OK) {
+		return GED_ERROR;
+	}
+
 	if (info->event_idx == 0) {
 	    dplot_print_event_legend(info);
 	}
