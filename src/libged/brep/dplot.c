@@ -446,15 +446,12 @@ HIDDEN int
 dplot_linked_curves(
 	struct dplot_info *info)
 {
-    int i;
     if (info->mode != DPLOT_LINKED_CURVES) {
 	return GED_OK;
     }
 
     if (info->event_idx >= info->fdata.linked_curve_count) {
-	for (i = 0; i < info->fdata.linked_curve_count; ++i) {
-	    dplot_overlay(info->gedp, info->prefix, "_linked_curve", i, NULL);
-	}
+	dplot_overlay(info->gedp, info->prefix, "_linked_curve", -1, NULL);
     } else {
 	dplot_overlay(info->gedp, info->prefix, "_linked_curve",
 		info->event_idx, "linked_curve");
