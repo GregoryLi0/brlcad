@@ -176,14 +176,14 @@ dplot_ssx(
     if (info->mode == DPLOT_SSX || info->mode == DPLOT_SSX_EVENTS) {
 	ret = dplot_overlay(info->gedp, info->prefix, "_highlight_brep1_surface",
 		info->brep1_surf_idx, "dplot_ssx1");
-	if (ret != GED_OK) {
+	/*if (ret != GED_OK) {
 	    return GED_ERROR;
-	}
+	}*/
 	ret = dplot_overlay(info->gedp, info->prefix, "_highlight_brep2_surface",
 		info->brep2_surf_idx, "dplot_ssx2");
-	if (ret != GED_OK) {
+	/*if (ret != GED_OK) {
 	    return GED_ERROR;
-	}
+	}*/
 	if (info->mode == DPLOT_SSX) {
 	    /* advance past the completed pair */
 	    ++info->ssx_idx;
