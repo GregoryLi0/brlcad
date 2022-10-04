@@ -224,6 +224,15 @@ dplot_ssx_events(
     if (info->event_count > 0) {
 
 	/* plot overlay */
+	struct bu_vls infix = BU_VLS_INIT_ZERO;
+	bu_vls_printf(&infix, "_ssx%d_event", info->ssx_idx);
+
+	ret = dplot_overlay(info->gedp, info->prefix, bu_vls_cstr(&infix),
+		info->event_idx, "curr_event");
+	if (ret != GED_OK) {
+		return GED_ERROR;
+	}
+
 	ret = dplot_overlay(info->gedp, info->prefix, "_highlight_brep1_surface",
 		info->brep1_surf_idx, "dplot_ssx1");
 	if (ret != GED_OK) {
