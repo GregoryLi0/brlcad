@@ -1406,17 +1406,16 @@ for (int i = 0; i < x_event.Count(); ++i) {
           <command>dplot</command> command is purely a development
           tool. Its implementation does not honor library boundaries
           and does not conform to the typical conventions for editor
-          commands, and for this reason is only available as an Archer
+          commands, it was only available as an Archer
           command in the NURBS Boolean evaluation development branch
-          (<link>https://sourceforge.net/p/brlcad/code/HEAD/tree/brlcad/branches/brep-debug/</link>).
+          (<link>https://sourceforge.net/p/brlcad/code/HEAD/tree/brlcad/branches/brep-debug/</link>). 
+          But now it's also available in the main branch.
         </para>
         <para>
-          In the development branch, the NURBS Boolean evaluation
-          source code contains additional calls to
-          <classname>DebugPlot</classname> functions (implemented in
-          <filename>debug_plot.cpp</filename>) that create
-          wireframe visualizations of data produced during the
-          evaluations.
+          The <command>dplot</command> command is achieved using 
+          <command>overlay</command> command.(implemented in 
+          <filename>dplot.c</filename>). The <command>overlay</command>
+          plots the specified UNIX plot_file in the MGED display.
         </para>
         <para>
           For development convenience, these wireframes are not saved
@@ -1436,7 +1435,8 @@ for (int i = 0; i < x_event.Count(); ++i) {
           evaluation between the first two objects in the combination,
           and the <filename>bool2*</filename> files will hold results
           from the final evaluation between the intermediate evaluated
-          object and the remaining leaf of the original comb.
+          object and the remaining leaf of the original comb. The 
+          counter resets when the software is reopened. 
         </para>
         <para>
           The <classname>DebugPlot</classname> functions always use
@@ -1446,7 +1446,11 @@ for (int i = 0; i < x_event.Count(); ++i) {
           <command>dplot</command> command, and then manually remove
           (or just move) the generated <filename>.dplot</filename> and
           <filename>.plot3</filename> files before performing another
-          evaluation with the <command>brep</command> command.
+          evaluation with the <command>brep</command> command. Now the 
+          <filename>bool*</filename> plot files will be created whether 
+          it's in the development branch or release branch or not after 
+          <command>brep * brep *</command> command. So please delete 
+          the plot files after brep converting.
         </para>
         <section>
           <title>The ssx Subcommands</title>
@@ -1466,7 +1470,7 @@ for (int i = 0; i < x_event.Count(); ++i) {
             </listitem>
 	    <listitem>
               <para>
-		<emphasis role="bold"><command>dplot bool1.dplot
+		<emphasis role="bold"><command>dplot bool1.dplot ssx
 		&lt;ssx_index&gt;</command></emphasis> lets you
 		interactively step through the specific
 		surface-surface intersections found between the pair
@@ -1618,7 +1622,13 @@ for (int i = 0; i < x_event.Count(); ++i) {
 		faces with the final linked intersection curves. Faces
 		that are considered part of the final result are drawn
 		highlighted, while faces that are discarded are drawn
-		dim.
+		dim. 
+        </para>
+        <para>
+    Because some <filename>bool*_split_face*_outerloop_curve*.plot3</filename> 
+    can't be plotted using <command>overlay</command>
+    command now, the faces plotted are not splitted ones 
+    but the original faces.
 	      </para>
 	      <para>
 		After each face is drawn independently, all faces are
