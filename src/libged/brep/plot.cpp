@@ -1864,7 +1864,7 @@ _brep_cmd_surface_plot(void *bs, int argc, const char **argv)
 	bu_color_to_rgb_chars(color, rgb);
 
 	const ON_Surface *surf = brep->m_S[si];
-	if (!surf->IsValid(NULL)) {
+        if (si >= brep->m_S.Count() || !surf->IsValid(NULL)) {
 	    bu_vls_printf(gib->vls, "surface %d is not valid, skipping", si);
 	    continue;
 	}
