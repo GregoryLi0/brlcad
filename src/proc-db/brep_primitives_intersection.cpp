@@ -44,7 +44,7 @@ const char* db_name = "brep_primitives_intersection.g";
 
 static void
 printusage(void) {
-    fprintf(stderr,"Usage: brep_primitives_intersection (takes no arguments)\n");
+    fprintf(stderr,"Usage: brep_primitives_intersection arb/sph\n");
 }
 
 void
@@ -291,14 +291,15 @@ main(int argc, char** argv)
 {
     ON_TextLog error_log;
     const char* id_name = "B-Rep Example";
-    const char* geom_name = "cube.s";
 
     bu_setprogname(argv[0]);
 
-    if (BU_STR_EQUAL(argv[1], "-h") || BU_STR_EQUAL(argv[1], "-?")) {
+    if (BU_STR_EQUAL(argv[1], "-h") || BU_STR_EQUAL(argv[1], "-?"))
+    {
     	printusage();
     	return 0;
     }
+    
     if (argc > 1) {
     	printusage();
 	return 1;
@@ -308,8 +309,15 @@ main(int argc, char** argv)
 
     outfp = wdb_fopen(db_name);
     mk_id(outfp, id_name);
-    create_sph_matrix();
 
+    if (BU_STR_EQUAL(argv[1], "sph"))
+    {
+        create_sph_matrix();
+    }
+    else if (BU_STR_EQUAL(argv[1], "arb8") || argc == 1)
+    {
+        create_arb8_matrix();
+    }
     ON::End();
 
     return 0;
