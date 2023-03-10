@@ -3543,12 +3543,12 @@ get_face_intersection_curves(
     }
 
     for (int i = 0; i < surf_count1; i++) {
-		surf_tree1.Append(new Subsurface(brep1->m_S[i]->Duplicate()));
+	surf_tree1.Append(new Subsurface(brep1->m_S[i]->Duplicate()));
 	Subsurface *ss = new Subsurface(brep1->m_S[i]->Duplicate());
 	st1.push_back(ss);
     }
     for (int i = 0; i < surf_count2; i++) {
-		surf_tree2.Append(new Subsurface(brep2->m_S[i]->Duplicate()));
+	surf_tree2.Append(new Subsurface(brep2->m_S[i]->Duplicate()));
 	Subsurface *ss = new Subsurface(brep2->m_S[i]->Duplicate());
 	st2.push_back(ss);
     }
