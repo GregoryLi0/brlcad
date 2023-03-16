@@ -3543,12 +3543,10 @@ get_face_intersection_curves(
     }
 
     for (int i = 0; i < surf_count1; i++) {
-	surf_tree1.Append(new Subsurface(brep1->m_S[i]->Duplicate()));
 	Subsurface *ss = new Subsurface(brep1->m_S[i]->Duplicate());
 	st1.push_back(ss);
     }
     for (int i = 0; i < surf_count2; i++) {
-	surf_tree2.Append(new Subsurface(brep2->m_S[i]->Duplicate()));
 	Subsurface *ss = new Subsurface(brep2->m_S[i]->Duplicate());
 	st2.push_back(ss);
     }
@@ -3562,7 +3560,7 @@ get_face_intersection_curves(
     // calculate intersection curves
     for (int i = 0; i < face_count1; i++) {
 
-	if ((int)surf_tree1.Count() < brep1->m_F[i].m_si + 1)
+	if ((int)st1.size() < brep1->m_F[i].m_si + 1)
 	    continue;
 
 	for (int j = 0; j < face_count2; j++) {
@@ -3576,7 +3574,7 @@ get_face_intersection_curves(
 		    continue;
 		}
 
-		if (surf_tree2.Count() < brep2->m_F[j].m_si + 1)
+		if (st2.size() < brep2->m_F[j].m_si + 1)
 		    continue;
 
 		// Possible enhancement: Some faces may share the same surface.
@@ -3591,8 +3589,8 @@ get_face_intersection_curves(
 				       NULL,
 				       NULL,
 				       NULL,
-					   surf_tree1[brep1->m_F[i].m_si],
-					   surf_tree2[brep2->m_F[j].m_si]);
+					   st1[brep1->m_F[i].m_si],
+					   st2[brep2->m_F[j].m_si]);
 		if (results <= 0) {
 		    continue;
 		}
