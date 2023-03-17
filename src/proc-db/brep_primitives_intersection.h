@@ -38,14 +38,14 @@
 * left to arb1
 */
 struct ON_3dPoint ps_arb_0[8] = {
-	{ -1,  -1,  -1 },
-	{ -1,  1,  -1 },
-	{ 1,  1,  -1 },
-	{ 1,  -1,  -1 },
-	{ -1,  -1,  1 },
-	{ -1,  1,  1 },
-	{ 1,  1,  1 },
-	{ 1,  -1,  1 }
+	ON_3dPoint(-1,  -1,  -1),
+	ON_3dPoint( -1,  1,  -1 ),
+	ON_3dPoint( 1,  1,  -1 ),
+	ON_3dPoint( 1,  -1,  -1 ),
+	ON_3dPoint( -1,  -1,  1 ),
+	ON_3dPoint( -1,  1,  1 ),
+	ON_3dPoint( 1,  1,  1 ),
+	ON_3dPoint( 1,  -1,  1 )
 };
 
 float v_arb_pos[5][2] = {
