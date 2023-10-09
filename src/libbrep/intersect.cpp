@@ -3550,6 +3550,8 @@ find_overlap_boundary_curves(
     double isect_tolB,
     double overlap_tol)
 {
+    if(dplot==nullptr) 
+	dplot = new DebugPlot("find_overlap_boundary_curves");
     for (int i = 0; i < 4; i++) {
 	bool is_surfA_iso = i < 2;
 	int knot_dir = i % 2;
